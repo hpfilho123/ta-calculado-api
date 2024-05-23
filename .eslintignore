@@ -1,1 +1,4 @@
 /dist
+/jest.config.js
+/jest-unit-config.js
+/jest-integration-config.js
