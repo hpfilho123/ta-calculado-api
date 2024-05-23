@@ -3,7 +3,7 @@ import { hash } from 'bcrypt';
 import { Service } from 'typedi';
 import { CreateUserDto } from '@dtos/users.dto';
 import { HttpException } from '@/exceptions/httpException';
-import { User } from '@interfaces/users.interface';
+import { User } from '@/interfaces/https.interface';
 
 @Service()
 export class UserService {
