@@ -1,4 +1,5 @@
 import { signUpController } from '../controllers/signUp';
+import { missingParamError } from '@/exceptions/signUp/missin-param-error';
 
 describe('sigUp Controller', () => {
   test('deve retornar 400 se nao enviar o nome ', () => {
@@ -12,7 +13,7 @@ describe('sigUp Controller', () => {
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new Error('missing param: name'));
+    expect(httpResponse.body).toEqual(new missingParamError('name'));
   });
 });
 
@@ -28,6 +29,6 @@ describe('sigUp Controller', () => {
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(400);
-    expect(httpResponse.body).toEqual(new Error('missing param: email'));
+    expect(httpResponse.body).toEqual(new missingParamError('email'));
   });
 });
