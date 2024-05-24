@@ -27,12 +27,6 @@
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
-  "lint-staged": {
-    "*.ts": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
   "husky": {
     "hooks": {
       "commit-msg": "npx git-commit-msg-linter"
