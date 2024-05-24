@@ -7,7 +7,6 @@ const makeSut = (): signUpController => {
   class EmailValidatorStub implements EmailValidator {
     isvalid(email: string): boolean {
       console.log(email);
-      console.log(email);
       return true;
     }
   }

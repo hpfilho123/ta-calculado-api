@@ -33,6 +33,11 @@
       "prettier --write"
     ]
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "npx git-commit-msg-linter"
+    }
+  },
   "dependencies": {
     "@prisma/client": "^4.1.0",
     "bcrypt": "^5.0.1",
