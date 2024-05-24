@@ -1,4 +1,4 @@
 {
-  "*.ts": ["eslint .gitignore --ext .ts src/"]
+  "*.ts": ["npm run lint"]
 }
 
