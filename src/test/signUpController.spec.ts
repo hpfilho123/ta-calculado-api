@@ -7,7 +7,7 @@ describe('sigUp Controller', () => {
       body: {
         email: 'hpsantos@bernhoet.com.br',
         password: 'Senha@123',
-        passwordConfim: 'Senha@1234',
+        passwordConfim: 'Senha@12345',
       },
     };
     const httpResponse = sut.handle(httpRequest);
