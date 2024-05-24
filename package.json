@@ -23,6 +23,12 @@
     "lint": "eslint .gitignore --ext .ts src/",
     "husky:prepare": "husky install"
   },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
   "prisma": {
     "schema": "src/prisma/schema.prisma"
   },
