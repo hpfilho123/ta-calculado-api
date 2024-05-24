@@ -33,20 +33,6 @@
       "prettier --write"
     ]
   },
-  "git-commit-msg-linter": {
-    "typeEnum": [
-      "feat",
-      "fix",
-      "docs",
-      "style",
-      "refactor",
-      "test",
-      "chore"
-    ],
-    "subjectPattern": ".{1,50}",
-    "warnOnFail": false,
-    "autoFix": false
-  },
   "dependencies": {
     "@prisma/client": "^4.1.0",
     "bcrypt": "^5.0.1",
