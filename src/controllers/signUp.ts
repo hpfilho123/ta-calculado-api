@@ -1,17 +1,31 @@
-import { httpResponse, httpRequest } from '../interfaces/https.interface';
-export class signUpController {
+import {
+  httpResponse,
+  httpRequest,
+} from '../interfaces/signUp/https.interface';
+import { missingParamError } from '@/exceptions/signUp/missin-param-error';
+import { badResquest } from '@/utils/http-helper';
+import { controller } from '@/interfaces/signUp/controler.interface';
+import { EmailValidator } from '@/interfaces/email-validator.interface';
+import { invalidParamError } from '@/exceptions/signUp/invalid-param-error';
+
+export class signUpController implements controller {
+  private readonly emailValidator: EmailValidator;
+
+  constructor(emailValidator: EmailValidator) {
+    this.emailValidator = emailValidator;
+  }
+
   handle(httpRequest: httpRequest): httpResponse {
-    if (!httpRequest.body.name) {
-      return {
-        statusCode: 400,
-        body: new Error('missing param: name'),
-      };
+    const requireFilds = ['name', 'email', 'password', 'passwordConfim'];
+
+    for (const field of requireFilds) {
+      if (!httpRequest.body[field]) {
+        return badResquest(new missingParamError(field));
+      }
     }
-    if (!httpRequest.body.email) {
-      return {
-        statusCode: 400,
-        body: new Error('missing param: email'),
-      };
+    const isValid = this.emailValidator.isvalid(httpRequest.body.email);
+    if (!isValid) {
+      return badResquest(new invalidParamError('email'));
     }
   }
 }
