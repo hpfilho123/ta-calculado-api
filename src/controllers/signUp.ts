@@ -2,11 +2,10 @@ import {
   httpResponse,
   httpRequest,
 } from '../interfaces/signUp/https.interface';
-import { missingParamError } from '@/exceptions/signUp/missin-param-error';
+import { missingParamError, invalidParamError } from '@/exceptions/index';
 import { badResquest, serverError } from '@/utils/http-helper';
 import { controller } from '@/interfaces/signUp/controler.interface';
 import { EmailValidator } from '@/interfaces/email-validator.interface';
-import { invalidParamError } from '@/exceptions/signUp/invalid-param-error';
 
 export class signUpController implements controller {
   private readonly emailValidator: EmailValidator;
