@@ -1,14 +1,13 @@
-import {
-  invalidParamError,
-  missingParamError,
-  ServerError,
-} from '@/exceptions/index';
+import { invalidParamError, missingParamError } from '@/exceptions/index';
 import { signUpController } from '../controllers/signUp';
 import { EmailValidator } from '@/interfaces/email-validator.interface';
+import { AccountModel } from '@/interfaces/business/model/account';
+import { AddAccount, AddAccountModel } from '@/interfaces/business/add-account';
 
 interface sutTypes {
   sut: signUpController;
   emailValidatorStub: EmailValidator;
+  addAccountStub: AddAccount;
 }
 
 const makeSut = (): sutTypes => {
@@ -18,11 +17,27 @@ const makeSut = (): sutTypes => {
     }
   }
   const emailValidatorStub = new EmailValidatorStub();
-  const sut = new signUpController(emailValidatorStub);
+  const addAccountStub = makeAddAccount();
+  const sut = new signUpController(emailValidatorStub, addAccountStub);
   return {
     sut,
     emailValidatorStub,
+    addAccountStub,
   };
+};
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add(account: AddAccountModel): AccountModel {
+      const fakeAccount = {
+        id: '5',
+        name: 'helio pereira',
+        email: 'hpsantos@bernhoeft.com.br',
+        password: 'Senha@123',
+      };
+      return fakeAccount;
+    }
+  }
+  return new AddAccountStub();
 };
 
 describe('sigUp Controller', () => {
@@ -90,6 +105,23 @@ describe('sigUp Controller', () => {
 });
 
 describe('sigUp Controller', () => {
+  test('deve retornar 400 se confirmação de email for invalida', () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+      body: {
+        name: 'helio pereira',
+        email: 'valid_email@gmail.com',
+        password: 'Senha@123',
+        passwordConfim: 'Senha@1234',
+      },
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(400);
+    expect(httpResponse.body).toEqual(new invalidParamError('passwordConfim'));
+  });
+});
+
+describe('sigUp Controller', () => {
   test('deve retornar 400 se o email for invalido ', () => {
     const { sut, emailValidatorStub } = makeSut();
     jest.spyOn(emailValidatorStub, 'isvalid').mockReturnValueOnce(false);
@@ -125,24 +157,22 @@ describe('sigUp Controller', () => {
 });
 
 describe('sigUp Controller', () => {
-  test('deve retornar 500 se o email for throws ', () => {
-    class EmailValidatorStub implements EmailValidator {
-      isvalid(email: string): boolean {
-        throw new Error();
-      }
-    }
-    const emailValidatorStub = new EmailValidatorStub();
-    const sut = new signUpController(emailValidatorStub);
+  test('deve retornar chamar AddAccount quando os calores forem corretos', () => {
+    const { sut, addAccountStub } = makeSut();
+    const addSpy = jest.spyOn(addAccountStub, 'add');
     const httpRequest = {
       body: {
         name: 'helio pereira',
-        email: 'valid_email@gmail.com',
+        email: 'invalid_email',
         password: 'Senha@123',
         passwordConfim: 'Senha@123',
       },
     };
-    const httpResponse = sut.handle(httpRequest);
-    expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new ServerError());
+    sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'helio pereira',
+      email: 'invalid_email',
+      password: 'Senha@123',
+    });
   });
 });
