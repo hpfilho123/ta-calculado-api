@@ -2,7 +2,7 @@ import { invalidParamError } from '@/exceptions/signUp/invalid-param-error';
 import { signUpController } from '../controllers/signUp';
 import { missingParamError } from '@/exceptions/signUp/missin-param-error';
 import { EmailValidator } from '@/interfaces/email-validator.interface';
-import { serverError } from '@/exceptions/serverError';
+import { ServerError } from '@/exceptions/serverError';
 
 interface sutTypes {
   sut: signUpController;
@@ -141,6 +141,6 @@ describe('sigUp Controller', () => {
     };
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
-    expect(httpResponse.body).toEqual(new serverError());
+    expect(httpResponse.body).toEqual(new ServerError());
   });
 });
